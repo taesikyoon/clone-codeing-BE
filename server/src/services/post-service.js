@@ -28,7 +28,7 @@ class PostService {
 
   findOnePost = async (id) => {
     const list = await Post.findOne({ where: { id } });
-    console.log(list);
+
     if (!list) {
       const error = new Error("게시글이 존재하지 않습니다.");
       error.status = 418;
