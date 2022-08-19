@@ -4,8 +4,7 @@ class PostService {
   createpost = async (content, image) => {
     const data = await Post.create({ content, image });
 
-    if (data) return true;
-    else {
+    if (!data) {
       const error = new Error("게시글 작성 실패");
       error.status = 400;
       throw error;
@@ -29,11 +28,11 @@ class PostService {
 
   findOnePost = async (id) => {
     const list = await Post.findOne({ where: { id } });
-
+    console.log(list);
     if (!list) {
       const error = new Error("게시글이 존재하지 않습니다.");
       error.status = 418;
-      return error;
+      throw error;
     }
     return {
       id: list.id,
