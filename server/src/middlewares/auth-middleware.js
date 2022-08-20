@@ -19,6 +19,7 @@ const authMiddlewares = async (req, res, next) => {
       const nickname = token.nickname
       await userRepository.getUser(nickname).then(( user ) => {         
          res.locals.user = user;
+         req.user = user;
          next();
       });
    } catch (err) {
