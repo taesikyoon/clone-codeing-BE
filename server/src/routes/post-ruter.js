@@ -1,7 +1,10 @@
-import express from "express";
+import express, { application } from "express";
 import PostController from "../controller/post-controller.js";
+import authMiddlewares from "../middlewares/auth-middleware.js";
 const router = express.Router();
 const postController = new PostController();
+
+router.use(authMiddlewares);
 
 router.post("/create", postController.createpost);
 router.get("/", postController.findAllPosts);

@@ -1,7 +1,10 @@
 import Post from "../models/post.js";
+import User from "../models/user.js";
+import Comment from "../models/comment.js";
+import { db } from "../models/index.js";
 // Like는 어떻게 불러오지?
 class PostService {
-  createpost = async (content, image) => {
+  createpost = async (content, image, fk_user_id, nickname) => {
     const data = await Post.create({ content, image, fk_user_id });
 
     if (!data) {
@@ -12,16 +15,28 @@ class PostService {
   };
 
   findAllPosts = async () => {
-    const lists = await Post.findAll({});
-
+    const lists = await Post.findAll({
+      // attributes: ["id", "content"],
+      include: [
+        { model: User, attributes: ["image", "nickname"] },
+        { model: Comment },
+      ],
+      // include: [{ model: Comment }],
+    });
+    return lists;
+    // const postlikes = db.sequelize.models.Like({ where: { fk_user_id } });
     return lists.map((list) => {
       return {
-        id: list.id,
+        postId: list.id,
         content: list.content,
-        image: list.image,
-        userId: "userId가져올예정",
-        commentCnt: "comment가져올예정",
-        postlikes: "postlikes가져올예정",
+        postimg: list.image,
+        createAt: list.createAt,
+        updatedAt: list.updatedAt,
+        // cntcomment: list.Comment,
+        User: {
+          userimage: list.User.image,
+          nickname: list.User.nickname,
+        },
       };
     });
   };
@@ -88,8 +103,10 @@ class PostService {
       error.status = 409;
       throw error;
     }
-    const existPost = await Post.findOne({ where: { id, fk_user_id } });
-    await existPost.liker({ fk_user_id });
+    // db.sequelize.models.Like({ where: { fk_user_id } });
+    const existPost = await Post.findByPk(id);
+    console.log(existPost);
+    await existPost.addLiker(fk_user_id);
   };
 
   unlikepost = async (id, userId) => {
