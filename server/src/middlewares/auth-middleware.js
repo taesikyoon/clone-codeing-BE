@@ -16,9 +16,9 @@ const authMiddlewares = async (req, res, next) => {
    }
    try {
       const token = jwt.verify(authToken, process.env.SECRET_KEY)
-      const id = token.id
-      await userRepository.getUser(id).then(( id ) => {         
-         res.locals.id = id;
+      const nickname = token.nickname
+      await userRepository.getUser(nickname).then(( user ) => {         
+         res.locals.user = user;
          next();
       });
    } catch (err) {
