@@ -5,9 +5,9 @@ dotenv.config();
 const config = {
   development: {
     username: "root",
-    password: "broccoli",
-    database: "clone",
-    host: "127.0.0.1",
+    password: "clone999",
+    database: "insta_db",
+    host: "instagram-clone.cmfbpxquatib.ap-northeast-2.rds.amazonaws.com",
     dialect: "mysql",
     logging: false,
     timezone: "+09:00",
