@@ -4,10 +4,17 @@ dotenv.config();
 
 const config = {
   development: {
+<<<<<<< HEAD
+    username: "root",
+    password: "clone999",
+    database: "insta_db",
+    host: "instagram-clone.cmfbpxquatib.ap-northeast-2.rds.amazonaws.com",
+=======
     username: process.env.DB_NAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     host: process.env.DB_HOST,
+>>>>>>> main
     dialect: "mysql",
     logging: false,
     timezone: "+09:00",

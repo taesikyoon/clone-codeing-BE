@@ -3,6 +3,7 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import chalk from "chalk";
 import path from "path";
+import userRouter from './routes/user-router.js';
 
 import { sequelize } from "./models/index.js";
 import postRouter from "./routes/post-ruter.js";
@@ -22,7 +23,12 @@ app.use(morgan("dev"));
 app.use("/image", express.static(path.join(__dirname, "images")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+<<<<<<< HEAD
+app.use('/api/auth', userRouter)
+
+=======
 app.use("/api/post", postRouter);
+>>>>>>> main
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 존재하지 않습니다.`);
   error.status = 404;
