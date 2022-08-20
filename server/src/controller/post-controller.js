@@ -4,12 +4,12 @@ class PostController {
 
   createpost = async (req, res, next) => {
     const { content, image } = req.body;
-    const { userId } = req.locals;
+    const { nickname, id } = res.locals;
     if (!content || !image)
       // 인스타그램 content는 null 허용 수정 필요
       res.status(409).json({ sucess: false, message: "이미지 넣어주세요" });
     try {
-      await this.postService.createpost(content, image, userId);
+      await this.postService.createpost(content, image, id, nickname);
       res
         .status(200)
         .json({ sucess: true, message: "게시글이 작성되었습니다." });
@@ -74,6 +74,7 @@ class PostController {
   likepost = async (req, res, next) => {
     try {
       const { postId } = req.params;
+      console.log(postId);
       // const { userId } = req.locals;
       const userId = 1;
       await this.postService.likepost(postId, userId);
