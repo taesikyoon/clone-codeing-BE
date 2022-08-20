@@ -19,7 +19,6 @@ const authMiddlewares = async (req, res, next) => {
 
   try {
     const verifyToken = jwt.verify(token[1], process.env.SECRET_KEY);
-    console.log(verifyToken);
     res.locals.nickname = verifyToken.nickname;
     res.locals.id = verifyToken.id;
 
