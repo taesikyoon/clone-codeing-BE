@@ -29,6 +29,7 @@ const config = {
     host: process.env.DB_HOST,
     dialect: "mysql",
     logging: false,
+    port: "3306",
   },
 };
 
