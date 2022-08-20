@@ -23,7 +23,7 @@ class PostService {
       ],
       // include: [{ model: Comment }],
     });
-    return lists;
+    // return lists;
     // const postlikes = db.sequelize.models.Like({ where: { fk_user_id } });
     return lists.map((list) => {
       return {
@@ -32,7 +32,7 @@ class PostService {
         postimg: list.image,
         createAt: list.createAt,
         updatedAt: list.updatedAt,
-        // cntcomment: list.Comment,
+        cntcomment: list.Comments.length,
         User: {
           userimage: list.User.image,
           nickname: list.User.nickname,
