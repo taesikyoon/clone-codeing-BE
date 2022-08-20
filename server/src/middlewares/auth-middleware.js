@@ -15,10 +15,10 @@ const authMiddlewares = async (req, res, next) => {
       return res.status(401).send("NONE_LOGIN");
    }
    try {
-      const token = jwt.verify(authToken, process.env.SECRET_KEY);
-      const nickname =token.nickname
-      await userRepository.getUser(nickname).then((user) => {
-         res.locals.user = user;
+      const token = jwt.verify(authToken, process.env.SECRET_KEY)
+      const id = token.id
+      await userRepository.getUser(id).then(( id ) => {         
+         res.locals.id = id;
          next();
       });
    } catch (err) {
