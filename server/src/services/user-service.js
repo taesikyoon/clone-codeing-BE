@@ -67,7 +67,7 @@ class UserService {
          error.code=400;
          throw error
       }
-      console.log (nickname)
+      console.log (id)
     //   //유저의 존재를 확인하기 위해 id를 기준으로 Users테이블 탐색
       try{
          const user = await this.userRepository.getUser(nickname);
