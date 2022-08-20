@@ -61,7 +61,7 @@ class UserService {
    };
 
    //로그인 진행
-   userSignin = async (nickname, password) => {
+   userSignin = async (nickname, password, id) => {
       if(nickname===undefined || password===undefined){
          const error= new Error("BAD_REQUEST")
          error.code=400;
@@ -88,7 +88,7 @@ class UserService {
       
       //토큰 생성
       try {
-         const token = jwt.sign({ nickname }, process.env.SECRET_KEY,{
+         const token = jwt.sign({ nickname, id }, process.env.SECRET_KEY,{
             expiresIn: '10h', //1분
           });
           console.log(token)
