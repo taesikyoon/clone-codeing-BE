@@ -15,10 +15,10 @@ router.post('/signup', userController.userSignup);
 //로그인>>controller
 router.post('/signin',userController.userSignin);
 //페이스북 로그인
-router.post('/facebook',userController.idCheck);
+// router.get('/facebook',userController.facebookLogin);
 //프로필 수정
-router.put("/profile",authMiddlewares,userController.checkUser);
+router.put("/profile",authMiddlewares,userController.updateProfile);
 //마이피드
-router.get("/feed",authMiddlewares,userController.checkUser);
+router.get("/feed",authMiddlewares,userController.getMyFeed);
 
 export default router;
