@@ -41,6 +41,7 @@ class PostService {
         createAt: list.createAt,
         updatedAt: list.updatedAt,
         cntcomment: list.Comments.length,
+        // likepost:라이크 포스트~
         User: {
           userimage: list.User.image,
           nickname: list.User.nickname,
@@ -50,8 +51,11 @@ class PostService {
   };
 
   findOnePost = async (id) => {
-    const list = await Post.findOne({ where: { id } });
-
+    const list = await Post.findOne({
+      where: { id },
+      include: [{ model: User }, { model: Comment }],
+    });
+    // return list;
     if (!list) {
       const error = new Error("게시글이 존재하지 않습니다.");
       error.status = 418;
@@ -60,10 +64,13 @@ class PostService {
     return {
       id: list.id,
       content: list.content,
-      image: list.image,
-      userId: "userId가져올예정",
-      commentCnt: "comment가져올예정",
-      postlikes: "postlikes가져올예정",
+      postimage: list.image,
+      comments: list.Comments,
+      PostingUser: {
+        userId: list.User.id,
+        userimage: list.User.image,
+        nickname: list.User.nickname,
+      },
     };
   };
 
@@ -72,45 +79,48 @@ class PostService {
   //
   //
   //   start
-  updatepost = async (id, content, image) => {
-    if (0 === id) {
-      const error = new Error("없는 게시물 입니다.");
-      error.status = 409;
-      throw error;
-    }
-
+  updatepost = async (postId, content, image, userId) => {
     if (!image) {
       const error = new Error("이미지 등록은 필수 입니다.");
       error.status = 428;
       throw error;
     }
-    // 유저 아이디
-    const result = await Post.update({ content, image }, { where: { id } });
-  };
-
-  deletepost = async (id) => {
-    if (0 === id) {
-      const error = new Error("없는 게시물 입니다.");
+    // 유저 아이디 자기 아이디만 수정가능
+    const existPost = await Post.findByPk(postId);
+    console.log(existPost);
+    if (!existPost) {
+      const error = new Error("존재하지 않는 게시물");
+      error.status = 400;
+      throw error;
+    }
+    if (existPost.fk_user_id === userId) {
+      await Post.update({ content, image }, { where: { id: postId } });
+    } else {
+      const error = new Error("자신의 게시글만 수정 가능합니다.");
       error.status = 409;
       throw error;
     }
+  };
 
-    const existPost = await Post.findByPk(id);
+  deletepost = async ([postId, userId]) => {
+    const existPost = await Post.findByPk(postId);
 
-    if (existPost) await Post.destroy({ where: { id } });
+    if (!existPost) {
+      const error = new Error("존재하지 않는 게시물");
+      error.status = 400;
+      throw error;
+    }
+
+    if (existPost.fk_user_id === userId)
+      await Post.destroy({ where: { id: postId } });
     else {
-      const error = new Error("없는 게시물 입니다.");
+      const error = new Error("자신의 게시글만 수정 가능합니다.");
       error.status = 409;
       throw error;
     }
   };
 
   likepost = async (id, fk_user_id) => {
-    if (0 === id) {
-      const error = new Error("없는 게시물 입니다.");
-      error.status = 409;
-      throw error;
-    }
     // db.sequelize.models.Like({ where: { fk_user_id } });
     const existPost = await Post.findByPk(id);
     console.log(existPost);
