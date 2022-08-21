@@ -135,6 +135,23 @@ class UserService {
     }
     return { status: 200, message: "SUCCES" };
   };
+
+  //프로필 수정
+  updateProfile = async (name, nickname, profile, introduce, email, phone, gender, id ) => {
+      
+      const isUpdated = await this.userRepository
+      .updateProfile(name, nickname, profile, introduce, email, phone, gender, id);
+
+      return { isUpdated, message: "SUCESS" };
+  };
+
+  getMyFeed = async ( id ) => {
+
+    const myFeed = await this.userRepository.getMyFeed(id);
+
+    return myFeed;
+  };
+
 }
 
 export default UserService;

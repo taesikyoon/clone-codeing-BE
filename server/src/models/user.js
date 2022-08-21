@@ -29,7 +29,23 @@ export default class User extends Sequelize.Model {
         type: Sequelize.STRING(20),
         allowNull: false,
         defaultValue: "local",
-      }
+      },
+      introduce: {
+        type: Sequelize.STRING(50),
+        allowNull: true,
+      },
+      email: {
+        type: Sequelize.STRING(50),
+        allowNull: true,
+      },
+      phone: {
+        type: Sequelize.STRING(20),
+        allowNull: true,
+      },
+      gender: {
+        type: Sequelize.ENUM("남자", "여자"),
+        allowNull: true,
+      },
     }, {
       sequelize,
       timestamps: true,
@@ -43,7 +59,6 @@ export default class User extends Sequelize.Model {
   };
 
   static associate(db) {
-    db.User.hasOne(db.UserDetail, { foreignKey: "fk_user_id", sourceKey: "id" });
     db.User.hasMany(db.Comment, { foreignKey: "fk_user_id", sourceKey: "id" });
     db.User.hasMany(db.Post, { foreignKey: "fk_user_id", sourceKey: "id" });
     db.User.belongsToMany(db.Post, { through: "Like", foreignKey: "fk_user_id", sourceKey: "id" });

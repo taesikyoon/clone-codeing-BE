@@ -76,7 +76,7 @@ class UserController {
 
   //아이디 중복확인
   idCheck = async (req, res) => {
-    const { nickname } = req.body;
+    const { } = req.body;
     try {
       const check = await this.userService.idCheck(id);
 
@@ -86,6 +86,69 @@ class UserController {
       return res.status(err.code).send(err.message);
     }
   };
-}
+
+  updateProfile = async (req, res) => {
+    const { name, nickname, profile, introduce, email, phone, gender } = req.body;
+    const { id } = res.locals;
+
+    try {
+      await joi
+        .object({
+          name: joi.string(),
+          nickname: joi.string(),
+          profile: joi.string(),
+          introduce: joi.string(),
+          email: joi.string(),
+          phone: joi.number(),
+          gender: joi.string(),
+          id: joi.number(),
+        })
+        .validateAsync({ name, nickname, profile, introduce, email, phone, gender, id });
+    } catch (err) {
+
+      return res.status(400).json("BAD_REQUEST");
+    }
+
+
+    try {
+      const result = await this.userService.updateProfile(
+        name,
+        nickname,
+        profile,
+        introduce,
+        email,
+        phone,
+        gender,
+        id,
+      );
+      console.log(introduce)
+      return res.status(200).json(result);
+
+    } catch (err) {
+
+      return res.status(err.code).send(err.message);
+    }
+  };
+
+  getMyFeed = async (req, res) => {
+    const { id } = res.locals;
+
+    try {
+      await joi
+        .object({
+          id: joi.number().required()
+        })
+        .validateAsync({ id });
+    } catch (err) {
+      return res.status(400).json("BAD_REQUEST");
+    }
+    try {
+      const result = await this.userService.getMyFeed( id );      
+      return res.json(result);
+    } catch (err) {
+      return res.status(400).json('failed');
+    }
+  };
+};
 
 export default UserController;
