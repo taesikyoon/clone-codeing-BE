@@ -50,8 +50,9 @@ class PostController {
     try {
       const { content, image } = req.body;
       const { postId } = req.params;
+      const { id } = res.locals;
 
-      await this.postService.updatepost(postId, content, image);
+      await this.postService.updatepost(postId, content, image, id);
       res.status(200).json({ sucess: true, message: "게시글 수정 완료." });
     } catch (err) {
       console.error(err);
@@ -62,8 +63,9 @@ class PostController {
   deletepost = async (req, res, next) => {
     try {
       const { postId } = req.params;
-
-      await this.postService.deletepost(postId);
+      const { id } = res.locals;
+      console.log(id);
+      await this.postService.deletepost(postId, id);
       res.status(200).json({ sucess: true, message: "게시글 삭제 완료." });
     } catch (err) {
       console.error(err);
