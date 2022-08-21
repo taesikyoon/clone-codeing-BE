@@ -1,6 +1,7 @@
 import Post from "../models/post.js";
 import User from "../models/user.js";
 import Comment from "../models/comment.js";
+
 import { db } from "../models/index.js";
 // Like는 어떻게 불러오지?
 class PostService {
@@ -19,11 +20,18 @@ class PostService {
       // attributes: ["id", "content"],
       include: [
         { model: User, attributes: ["image", "nickname"] },
-        { model: Comment },
+        {
+          model: Comment,
+          // attributes: [
+          //   [db.sequelize.fn("COUNT", db.sequelize.col("fk_post_id")), "Cnt"],
+          // ],
+        },
       ],
       // include: [{ model: Comment }],
     });
     // return lists;
+
+    // like 준비하기
     // const postlikes = db.sequelize.models.Like({ where: { fk_user_id } });
     return lists.map((list) => {
       return {
