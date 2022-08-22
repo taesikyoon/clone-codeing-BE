@@ -10,7 +10,7 @@ const authMiddlewares = async (req, res, next) => {
   //    const { authorization } = req.headers;
 
   const { authorization } = req.headers;
-  if (authMiddlewares) {
+  if (!authMiddlewares) {
     return res
       .status(400)
       .json({ success: false, message: "로그인이 필요합니다." });
