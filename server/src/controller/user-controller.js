@@ -25,10 +25,12 @@ class UserController {
       const result = await this.userService.userSignup(
         name,
         password,
-        nickname
+        nickname        
       );
 
-      return res.status(200).send(result);
+      const message = "true"
+
+      return res.status(200).send(message);
     } catch (err) {
       return res.status(400).send(err.message);
     }
@@ -145,7 +147,9 @@ class UserController {
     } catch (err) {
       return res.status(400).json('failed');
     }
-  };
+  }; 
+  
 };
+
 
 export default UserController;
