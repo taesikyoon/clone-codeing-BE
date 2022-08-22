@@ -9,6 +9,8 @@ import postRouter from "./routes/post-router.js";
 import commentRouter from "./routes/comment-router.js";
 // import facebook_login from "/middlewares/fb-middleware.js";
 
+import token from "./middlewares/token.js";
+
 import { sequelize } from "./models/index.js";
 
 dotenv.config();
@@ -32,6 +34,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", userRouter);
 app.use("/api/post", postRouter);
 app.use("/api/comment", commentRouter);
+app.get("/token", token);
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 존재하지 않습니다.`);
