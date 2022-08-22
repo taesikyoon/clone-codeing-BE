@@ -28,11 +28,12 @@ class UserController {
         nickname        
       );
 
-      const message = "true"
-
+      const message = "success : true"
+      
       return res.status(200).send(message);
     } catch (err) {
-      return res.status(400).send(err.message);
+      const message2 = "success: false"
+      return res.status(400).send(message2);
     }
   };
 
@@ -44,7 +45,7 @@ class UserController {
     if (
       authToken !== undefined &&
       authToken !== null &&
-      authType === "BEAVER"
+      authType === "Bearer"
     ) {
       return res.status(400).send("DONE_LOGIN");
     }
