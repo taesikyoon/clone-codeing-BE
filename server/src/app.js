@@ -6,6 +6,7 @@ import path from "path";
 import userRouter from "./routes/user-router.js";
 import postRouter from "./routes/post-router.js";
 import commentRouter from "./routes/comment-router.js";
+// import facebook_login from "/middlewares/fb-middleware.js";
 
 import { sequelize } from "./models/index.js";
 dotenv.config();
@@ -23,6 +24,8 @@ sequelize
 app.use(morgan("dev"));
 app.use("/image", express.static(path.join(__dirname, "images")));
 app.use(express.json());
+// facebook_login()
+
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", userRouter);
