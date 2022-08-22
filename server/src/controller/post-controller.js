@@ -7,7 +7,7 @@ class PostController {
 
     if (!content || !image)
       // 인스타그램 content는 null 허용 수정 필요
-      res.status(409).json({ sucess: false, message: "이미지 넣어주세요" });
+      return res.status(409).json({ sucess: false, message: "이미지 넣어주세요" });
     try {
       await this.postService.createpost(content, image);
       res

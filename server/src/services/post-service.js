@@ -3,6 +3,7 @@ import User from "../models/user.js";
 import Comment from "../models/comment.js";
 
 import { db } from "../models/index.js";
+
 // Like는 어떻게 불러오지?
 class PostService {
   createpost = async (content, image, fk_user_id, nickname) => {

@@ -24,5 +24,6 @@ export default class Comment extends Sequelize.Model {
   static associate(db) {
     db.Comment.belongsTo(db.Post, { foreignKey: "fk_post_id", sourceKey: "id" });
     db.Comment.belongsTo(db.User, { foreignKey: "fk_user_id", sourceKey: "id" });
+    db.Comment.belongsToMany(db.User, { through: "CommentLike", as: "Liker" });
   }
 }

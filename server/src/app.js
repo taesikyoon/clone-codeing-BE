@@ -3,11 +3,13 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import chalk from "chalk";
 import path from "path";
+
 import userRouter from "./routes/user-router.js";
 import postRouter from "./routes/post-router.js";
 import commentRouter from "./routes/comment-router.js";
 
 import { sequelize } from "./models/index.js";
+
 dotenv.config();
 
 const app = express();
@@ -36,6 +38,7 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+  err.status = err.status || 500;
   return res.status(err.status).json({
     success: false,
     message: err.message,

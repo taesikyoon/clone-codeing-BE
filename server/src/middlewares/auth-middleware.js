@@ -12,7 +12,7 @@ const authMiddlewares = async (req, res, next) => {
   const { authorization } = req.headers;
 
   const token = authorization.split(" ");
-  if (token[0] !== "Bearer")
+  if (token[0] !== "Bearer" || !token)
     return res
       .status(401)
       .json({ success: false, message: "로그인이 필요합니다." });
@@ -21,11 +21,11 @@ const authMiddlewares = async (req, res, next) => {
     const verifyToken = jwt.verify(token[1], process.env.SECRET_KEY);
     res.locals.nickname = verifyToken.nickname;
     res.locals.id = verifyToken.id;
-
     next();
   } catch (err) {
     console.log(err);
-    res.status(401).send("NONE_LOGIN");
+    err.message = "유효하지 않은 토큰입니다.";
+    next(err);
   }
 };
 
