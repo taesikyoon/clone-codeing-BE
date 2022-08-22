@@ -8,7 +8,10 @@ class PostController {
 
     if (!content || !image)
       // 인스타그램 content는 null 허용 수정 필요
-      return res.status(409).json({ sucess: false, message: "이미지 넣어주세요" });
+      return res
+        .status(409)
+        .json({ sucess: false, message: "이미지 넣어주세요" });
+
     try {
       await this.postService.createpost(content, image, id);
       res
@@ -24,7 +27,7 @@ class PostController {
     try {
       const data = await this.postService.findAllPosts();
 
-      res
+      return res
         .status(200)
         .json({ sucess: true, message: "전체 게시글 조회 성공.", data });
     } catch (err) {
@@ -38,7 +41,7 @@ class PostController {
 
     try {
       const data = await this.postService.findOnePost(postId);
-      res
+      return res
         .status(200)
         .json({ sucess: true, message: "상세 게시글 조회 성공.", data });
     } catch (err) {
@@ -54,7 +57,9 @@ class PostController {
       const { id } = res.locals;
 
       await this.postService.updatepost(postId, content, image, id);
-      res.status(200).json({ sucess: true, message: "게시글 수정 완료." });
+      return res
+        .status(200)
+        .json({ sucess: true, message: "게시글 수정 완료." });
     } catch (err) {
       console.error(err);
       next(err);
@@ -68,7 +73,9 @@ class PostController {
       const { id } = res.locals;
       console.log(id);
       await this.postService.deletepost(postId, id);
-      res.status(200).json({ sucess: true, message: "게시글 삭제 완료." });
+      return res
+        .status(200)
+        .json({ sucess: true, message: "게시글 삭제 완료." });
     } catch (err) {
       console.error(err);
       next(err);
@@ -81,7 +88,7 @@ class PostController {
       const { userId } = req.locals;
       await this.postService.likepost(postId, userId);
 
-      res.status(200).json({ sucess: true, message: "좋아요 완료." });
+      return res.status(200).json({ sucess: true, message: "좋아요 완료." });
     } catch (err) {
       console.error(err);
       next(err);
@@ -94,7 +101,9 @@ class PostController {
       const { userId } = req.locals;
       await this.postService.unlikepost(postId, userId);
 
-      res.status(200).json({ sucess: true, message: "좋아요 취소 완료." });
+      return res
+        .status(200)
+        .json({ sucess: true, message: "좋아요 취소 완료." });
     } catch (err) {
       console.error(err);
       next(err);
