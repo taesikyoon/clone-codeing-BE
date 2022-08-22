@@ -7,6 +7,7 @@ import path from "path";
 import userRouter from "./routes/user-router.js";
 import postRouter from "./routes/post-router.js";
 import commentRouter from "./routes/comment-router.js";
+// import facebook_login from "/middlewares/fb-middleware.js";
 
 import { sequelize } from "./models/index.js";
 
