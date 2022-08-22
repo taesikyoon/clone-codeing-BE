@@ -7,7 +7,9 @@ import verify from "../middlewares/auth-middleware.js";
 const router = express.Router();
 
 router.post("/create/:postId", verify, commentController.createComment);
-router.delete("/:commentId", commentController.deleteComment);
-router.put("/:commentId", commentController.updateComment);
+router.put("/like/:commentId", verify, commentController.likeComment);
+router.delete("/unlike/:commentId", verify, commentController.unLikeComment);
+router.delete("/:commentId", verify, commentController.deleteComment);
+router.put("/:commentId", verify, commentController.updateComment);
 
 export default router;
