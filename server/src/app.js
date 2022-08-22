@@ -26,7 +26,6 @@ sequelize
 app.use(morgan("dev"));
 app.use("/image", express.static(path.join(__dirname, "images")));
 app.use(express.json());
-// facebook_login()
 
 app.use(express.urlencoded({ extended: true }));
 

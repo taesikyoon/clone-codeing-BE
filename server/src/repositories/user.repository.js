@@ -62,7 +62,7 @@ class UserRepository {
    };
       
    updateProfile = async ( name, nickname, profile, introduce, email, phone, gender, id) => {
-      console.log(id)
+      
       try{
          return await User.update({
             name: name, 
@@ -86,14 +86,15 @@ class UserRepository {
       try{         
          const posts = await Post.findAll({
             where: { fk_user_id : id },
-            attributes: {exclude: ['fk_user_id', 'updatedAt']},             
+            attributes: {exclude: ['fk_user_id', 'updatedAt']},
+            order: [['createdAt', 'DESC']],             
          });
          
          const user = await User.findOne({
             where: { id },
             attributes: ['id', 'name', 'nickname', 'image'],
          }); 
-         console.log(posts,user)
+
          return {user: user, posts: posts};
       } catch (err) {
          const error = new Error("FAILD_SQL");

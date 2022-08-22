@@ -35,7 +35,7 @@ class UserService {
       nickname
     );
     //자리수가 2이상 9이하를 제외
-    const reg_Nick2 = nickname.length < 2 || nickname > 9;
+    const reg_Nick2 = nickname.length < 2 || nickname.length > 9;
 
     //nick이 없으면 nickname가 같은 유저가 없다.
     if (nick != undefined) {
@@ -151,7 +151,6 @@ class UserService {
 
     return myFeed;
   };
-
 }
 
 export default UserService;
