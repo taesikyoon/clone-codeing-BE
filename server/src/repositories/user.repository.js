@@ -84,13 +84,17 @@ class UserRepository {
 
    getMyFeed = async(id) => {
       try{         
-         const response = await Post.findAll({
-            order: [['created_at', 'DESC']],
-            where: { fk_user_id : id},
-            attributes: {exclude: ['fk_user_id']}
-         });   
-         console.log(response)
-         return response;
+         const posts = await Post.findAll({
+            where: { fk_user_id : id },
+            attributes: {exclude: ['fk_user_id', 'updatedAt']},             
+         });
+         
+         const user = await User.findOne({
+            where: { id },
+            attributes: ['id', 'name', 'nickname', 'image'],
+         }); 
+         console.log(posts,user)
+         return {user: user, posts: posts};
       } catch (err) {
          const error = new Error("FAILD_SQL");
          error.code = 405;
