@@ -6,7 +6,7 @@ import { db } from "../models/index.js";
 
 // Like는 어떻게 불러오지?
 class PostService {
-  createpost = async (content, image, fk_user_id, nickname) => {
+  createpost = async (content, image, fk_user_id) => {
     const data = await Post.create({ content, image, fk_user_id });
 
     if (!data) {
@@ -39,7 +39,7 @@ class PostService {
         postId: list.id,
         content: list.content,
         postimg: list.image,
-        createAt: list.createAt,
+        createAt: list.createdAt,
         updatedAt: list.updatedAt,
         cntcomment: list.Comments.length,
         // likepost:라이크 포스트~
@@ -54,7 +54,13 @@ class PostService {
   findOnePost = async (id) => {
     const list = await Post.findOne({
       where: { id },
-      include: [{ model: User }, { model: Comment }],
+      include: [
+        { model: User },
+        {
+          model: Comment,
+          include: [{ model: User, attributes: ["nickname"] }],
+        },
+      ],
     });
     // return list;
     if (!list) {
@@ -62,16 +68,25 @@ class PostService {
       error.status = 418;
       throw error;
     }
+    const commentlists = list.Comments.map((comment) => {
+      return {
+        commentid: comment.id,
+        comment: comment.comment,
+        createdAt: comment.createdAt,
+        updatedAt: comment.updatedAt,
+        nickname: comment.User.nickname,
+      };
+    });
     return {
       id: list.id,
       content: list.content,
       postimage: list.image,
-      comments: list.Comments,
       PostingUser: {
         userId: list.User.id,
         userimage: list.User.image,
         nickname: list.User.nickname,
       },
+      comments: commentlists,
     };
   };
 
@@ -103,8 +118,9 @@ class PostService {
     }
   };
 
-  deletepost = async ([postId, userId]) => {
+  deletepost = async (postId, userId) => {
     const existPost = await Post.findByPk(postId);
+    console.log(existPost);
 
     if (!existPost) {
       const error = new Error("존재하지 않는 게시물");
