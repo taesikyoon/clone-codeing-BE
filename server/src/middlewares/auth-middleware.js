@@ -10,6 +10,7 @@ const authMiddlewares = async (req, res, next) => {
   //    const { authorization } = req.headers;
 
   const { authorization } = req.headers;
+
   if (!authMiddlewares) {
     return res
       .status(400)

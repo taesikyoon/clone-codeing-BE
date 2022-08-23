@@ -3,9 +3,14 @@ class PostController {
   postService = new PostService();
 
   createpost = async (req, res, next) => {
-    const { content, image } = req.body;
+    const { content } = req.body;
+    // const { postImg } = req.file;
+    console.log(req.body, "req body");
+    const body = req.body;
+    const file = req.file;
+    console.log(req.file, "req file");
     const { id } = res.locals;
-
+    return res.json({ body });
     if (!content || !image)
       // 인스타그램 content는 null 허용 수정 필요
       return res
@@ -69,7 +74,6 @@ class PostController {
   deletepost = async (req, res, next) => {
     try {
       const { postId } = req.params;
-      console.log(postId);
       const { id } = res.locals;
       console.log(id);
       await this.postService.deletepost(postId, id);
