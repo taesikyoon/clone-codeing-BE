@@ -35,5 +35,6 @@ const postimage = multer({
       cb(null, `${Date.now()}_${file.originalname}`);
     },
   }),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5메가로 용량 제한
 });
 export { userimage, postimage };
