@@ -4,6 +4,7 @@ import Comment from "../models/comment.js";
 
 import { db } from "../models/index.js";
 
+const Like = db.sequelize.models.Like;
 // Like는 어떻게 불러오지?
 class PostService {
   createpost = async (content, image, fk_user_id) => {
@@ -21,15 +22,15 @@ class PostService {
       // attributes: ["id", "content"],
       include: [
         { model: User, attributes: ["image", "nickname"] },
-        {
-          model: Comment,
-          // attributes: [
-          //   [db.sequelize.fn("COUNT", db.sequelize.col("fk_post_id")), "Cnt"],
-          // ],
-        },
+        { model: Comment },
       ],
-      // include: [{ model: Comment }],
     });
+    const data = await Like.findAll({
+      attributes: ["fk_post_id"],
+      group: "fk_post_id",
+      raw: true,
+    });
+    console.log(data);
     // return lists;
 
     // like 준비하기
@@ -75,6 +76,7 @@ class PostService {
         createdAt: comment.createdAt,
         updatedAt: comment.updatedAt,
         nickname: comment.User.nickname,
+        image: comment.User.image,
       };
     });
     return {
