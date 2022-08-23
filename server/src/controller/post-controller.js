@@ -4,21 +4,16 @@ class PostController {
 
   createpost = async (req, res, next) => {
     const { content } = req.body;
-    // const { postImg } = req.file;
-    console.log(req.body, "req body");
-    const body = req.body;
-    const file = req.file;
-    console.log(req.file, "req file");
+    const { location } = req.file;
     const { id } = res.locals;
-    return res.json({ body });
-    if (!content || !image)
+    if (!image)
       // 인스타그램 content는 null 허용 수정 필요
       return res
         .status(409)
         .json({ sucess: false, message: "이미지 넣어주세요" });
 
     try {
-      await this.postService.createpost(content, image, id);
+      await this.postService.createpost(content, location, id);
       res
         .status(201)
         .json({ sucess: true, message: "게시글이 작성되었습니다." });
