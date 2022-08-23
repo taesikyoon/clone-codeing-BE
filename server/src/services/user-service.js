@@ -27,15 +27,15 @@ class UserService {
 
     //정규식
     //영어,숫자 4~9자리 (3인이유는 <이기떄문에)
-    const reg_Id = /^[A-Za-z0-9]{3,9}$/.test(nickname);
+    const reg_Id = /^[A-Za-z0-9]{2,9}$/.test(nickname);
     //영어,숫자 4~9자리 (3인이유는 <이기떄문에)
-    const reg_Pw = /^[A-Za-z0-9]{3,9}$/.test(password);
+    const reg_Pw = /^[A-Za-z0-9!@#$%^&*]{8,20}$/.test(password);
     //특수문자 제외
     const reg_Nick1 = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g.test(
       nickname
     );
     //자리수가 2이상 9이하를 제외
-    const reg_Nick2 = nickname.length < 2 || nickname > 9;
+    const reg_Nick2 = nickname.length < 2 || nickname.length > 9;
 
     //nick이 없으면 nickname가 같은 유저가 없다.
     if (nick != undefined) {
@@ -96,9 +96,7 @@ class UserService {
 
     //토큰 생성
     try {
-      const token = jwt.sign({ nickname, id }, process.env.SECRET_KEY, {
-        expiresIn: "10m", //1분*60*10
-      });
+      const token = jwt.sign({ nickname, id }, process.env.SECRET_KEY);
       console.log(token);
       //  const token = jwt.sign({id:{ id },iat: Math.floor(Date.now() / 1000) - 30 }, process.env.SECRET_KEY);
       //토큰과 상태,메시지 전송
@@ -151,7 +149,6 @@ class UserService {
 
     return myFeed;
   };
-
 }
 
 export default UserService;

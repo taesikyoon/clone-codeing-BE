@@ -25,12 +25,15 @@ class UserController {
       const result = await this.userService.userSignup(
         name,
         password,
-        nickname
+        nickname        
       );
 
-      return res.status(200).send(result);
+      const message = "success : true"
+      
+      return res.status(200).send(message);
     } catch (err) {
-      return res.status(400).send(err.message);
+      const message2 = "success: false"
+      return res.status(400).send(message2);
     }
   };
 
@@ -42,7 +45,7 @@ class UserController {
     if (
       authToken !== undefined &&
       authToken !== null &&
-      authType === "BEAVER"
+      authType === "Bearer"
     ) {
       return res.status(400).send("DONE_LOGIN");
     }
@@ -96,9 +99,9 @@ class UserController {
           nickname: joi.string(),
           profile: joi.string(),
           introduce: joi.string(),
-          email: joi.string(),
-          phone: joi.number(),
-          gender: joi.string(),
+          email: joi.string().email({ tlds: { allow: false } }),
+          phone: joi.string().length(11).pattern(/^[0-9]+$/),
+          gender: joi.string().valid('male','female'),
           id: joi.number(),
         })
         .validateAsync({ name, nickname, profile, introduce, email, phone, gender, id });
@@ -140,12 +143,14 @@ class UserController {
       return res.status(400).json("BAD_REQUEST");
     }
     try {
-      const result = await this.userService.getMyFeed( id );      
+      const result = await this.userService.getMyFeed(id);
       return res.json(result);
     } catch (err) {
       return res.status(400).json('failed');
     }
-  };
+  }; 
+  
 };
+
 
 export default UserController;

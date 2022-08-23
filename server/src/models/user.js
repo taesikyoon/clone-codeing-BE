@@ -12,6 +12,7 @@ export default class User extends Sequelize.Model {
       nickname: {
         type: Sequelize.STRING(20),
         allowNull: true,
+        unique: true,
       },
       password: {
         type: Sequelize.STRING(100),
@@ -43,7 +44,7 @@ export default class User extends Sequelize.Model {
         allowNull: true,
       },
       gender: {
-        type: Sequelize.ENUM("남자", "여자"),
+        type: Sequelize.ENUM("male", "female"),
         allowNull: true,
       },
     }, {
