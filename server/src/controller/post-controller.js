@@ -6,7 +6,7 @@ class PostController {
     const { content } = req.body;
     const { location } = req.file;
     const { id } = res.locals;
-    if (!image)
+    if (!location)
       // 인스타그램 content는 null 허용 수정 필요
       return res
         .status(409)
