@@ -52,11 +52,12 @@ class PostController {
 
   updatepost = async (req, res, next) => {
     try {
-      const { content, image } = req.body;
+      const { content } = req.body;
       const { postId } = req.params;
+      const { location } = req.file;
       const { id } = res.locals;
 
-      await this.postService.updatepost(postId, content, image, id);
+      await this.postService.updatepost(postId, content, location, id);
       return res
         .status(200)
         .json({ sucess: true, message: "게시글 수정 완료." });
