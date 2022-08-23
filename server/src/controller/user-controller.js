@@ -28,11 +28,11 @@ class UserController {
         nickname        
       );
 
-      const message = "success : true"
+      const message = "true"
       
       return res.status(200).send(message);
     } catch (err) {
-      const message2 = "success: false"
+      const message2 = "false"
       return res.status(400).send(message2);
     }
   };

@@ -7,6 +7,7 @@ import path from "path";
 import userRouter from "./routes/user-router.js";
 import postRouter from "./routes/post-router.js";
 import commentRouter from "./routes/comment-router.js";
+import facebookRouter from "./fb-login/fb.routes.js";
 
 import { sequelize } from "./models/index.js";
 
@@ -31,6 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", userRouter);
 app.use("/api/post", postRouter);
 app.use("/api/comment", commentRouter);
+app.use("/auth", facebookRouter);
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 존재하지 않습니다.`);

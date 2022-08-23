@@ -38,6 +38,7 @@ export default class User extends Sequelize.Model {
       email: {
         type: Sequelize.STRING(50),
         allowNull: true,
+        unique : true,
       },
       phone: {
         type: Sequelize.STRING(20),
