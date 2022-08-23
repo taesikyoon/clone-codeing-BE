@@ -103,7 +103,6 @@ class PostService {
     }
     // 유저 아이디 자기 아이디만 수정가능
     const existPost = await Post.findByPk(postId);
-    console.log(existPost);
     if (!existPost) {
       const error = new Error("존재하지 않는 게시물");
       error.status = 400;
@@ -120,7 +119,6 @@ class PostService {
 
   deletepost = async (postId, userId) => {
     const existPost = await Post.findByPk(postId);
-    console.log(existPost);
 
     if (!existPost) {
       const error = new Error("존재하지 않는 게시물");

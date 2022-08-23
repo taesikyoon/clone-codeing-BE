@@ -3,6 +3,7 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import chalk from "chalk";
 import path from "path";
+import cors from "cors";
 
 import userRouter from "./routes/user-router.js";
 import postRouter from "./routes/post-router.js";
@@ -24,7 +25,7 @@ sequelize
   // .sync({ force: true })
   .then(() => console.log("db connect"))
   .catch((err) => console.log(err));
-
+app.use(cors());
 app.use(morgan("dev"));
 app.use("/image", express.static(path.join(__dirname, "images")));
 app.use(express.json());
