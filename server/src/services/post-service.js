@@ -135,20 +135,52 @@ class PostService {
     }
   };
 
-  likepost = async (id, fk_user_id) => {
+  likepost = async (fk_post_id, fk_user_id) => {
     // db.sequelize.models.Like({ where: { fk_user_id } });
-    const existPost = await Post.findByPk(id);
-    console.log(existPost);
-    await existPost.addLiker(fk_user_id);
-  };
+    const existPost = await Post.findOne({
+      where: { id: fk_post_id },
+    });
+    // 게시글 존재
 
-  unlikepost = async (id, userId) => {
-    if (0 === id) {
-      const error = new Error("없는 게시물 입니다.");
-      error.status = 409;
+    if (existPost) {
+      const existLike = await existPost.getLiker({
+        where: { id: fk_user_id },
+      });
+      if (existLike.length) {
+        const error = new Error("두번 누를 수 없습니다.");
+        error.status = 409;
+        throw error;
+      }
+      await existPost.addLiker(fk_user_id);
+    } else {
+      const error = new Error("게시글이 존재하지 않습니다.");
+      error.status = 400;
       throw error;
     }
-    await Like.destroy({ where: { id, userId } });
+  };
+
+  unlikepost = async (fk_post_id, fk_user_id) => {
+    const existPost = await Post.findOne({
+      where: { id: fk_post_id },
+    });
+
+    if (existPost) {
+      // 게시글 존재
+      const existLike = await existPost.getLiker({
+        where: { id: fk_user_id },
+      });
+      if (existLike.length !== 0) {
+        await existPost.removeLiker(fk_user_id);
+      } else {
+        const error = new Error("좋아요 취소 됐다 고만 좀 누르라");
+        error.status = 409;
+        throw error;
+      }
+    } else {
+      const error = new Error("게시글이 존재하지 않습니다.");
+      error.status = 400;
+      throw error;
+    }
   };
 }
 

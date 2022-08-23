@@ -84,8 +84,8 @@ class PostController {
   likepost = async (req, res, next) => {
     try {
       const { postId } = req.params;
-      const { userId } = req.locals;
-      await this.postService.likepost(postId, userId);
+      const { id } = res.locals;
+      await this.postService.likepost(postId, id);
 
       return res.status(200).json({ sucess: true, message: "좋아요 완료." });
     } catch (err) {
@@ -97,8 +97,8 @@ class PostController {
   unlikepost = async (req, res, next) => {
     try {
       const { postId } = req.params;
-      const { userId } = req.locals;
-      await this.postService.unlikepost(postId, userId);
+      const { id } = res.locals;
+      await this.postService.unlikepost(postId, id);
 
       return res
         .status(200)

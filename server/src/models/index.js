@@ -19,5 +19,5 @@ Comment.init(sequelize);
 User.associate(db);
 Post.associate(db);
 Comment.associate(db);
-
+db.sequelize.models.Like;
 export { db };
