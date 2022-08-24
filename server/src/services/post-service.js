@@ -23,19 +23,28 @@ class PostService {
       include: [
         { model: User, attributes: ["image", "nickname"] },
         { model: Comment },
+        // { model: Like },
       ],
     });
-    const data = await Like.findAll({
-      attributes: ["fk_post_id"],
+    const likes = await Like.findAll({
+      attributes: [
+        "fk_post_id",
+        [
+          db.sequelize.fn("COUNT", db.sequelize.col("fk_user_id")),
+          "count_islike",
+        ],
+      ],
       group: "fk_post_id",
       raw: true,
     });
-    console.log(data);
-    // return lists;
 
+    // return likes;
     // like 준비하기
     // const postlikes = db.sequelize.models.Like({ where: { fk_user_id } });
     return lists.map((list) => {
+      const data =
+        list.id === likes[0].fk_post_id ? likes.shift().count_islike : 0;
+      console.log(data);
       return {
         postId: list.id,
         content: list.content,
@@ -43,7 +52,7 @@ class PostService {
         createAt: list.createdAt,
         updatedAt: list.updatedAt,
         cntcomment: list.Comments.length,
-        // likepost:라이크 포스트~
+        cntlike: data,
         User: {
           userimage: list.User.image,
           nickname: list.User.nickname,
