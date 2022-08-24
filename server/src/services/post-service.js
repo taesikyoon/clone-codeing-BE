@@ -37,13 +37,11 @@ class PostService {
       group: "fk_post_id",
       raw: true,
     });
-
     // return likes;
     // like 준비하기
     // const postlikes = db.sequelize.models.Like({ where: { fk_user_id } });
     return lists.map((list) => {
-      const data =
-        list.id === likes[0].fk_post_id ? likes.shift().count_islike : 0;
+      const data = list?.id === likes[0]?.id ? likes.shift().count_islike : 0;
       console.log(data);
       return {
         postId: list.id,
