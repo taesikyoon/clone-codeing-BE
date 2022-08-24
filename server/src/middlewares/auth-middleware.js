@@ -11,6 +11,23 @@ const authMiddlewares = async (req, res, next) => {
 
   const { authorization } = req.headers;
 
+
+  console.log(req.query.token)
+  if (req.query.token) {
+    try {
+      const verifyToken = jwt.verify(req.query.token, process.env.SECRET_KEY);
+      res.locals.nickname = verifyToken.nickname;
+      res.locals.id = verifyToken.id;
+      next();
+      return
+      
+    } catch (err) {
+      console.log(err);
+      err.message = "유효하지 않은 토큰입니다.";
+      next(err);
+      return
+    }   
+
   if (!authMiddlewares) {
     return res
       .status(400)

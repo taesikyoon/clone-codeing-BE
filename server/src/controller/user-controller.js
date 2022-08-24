@@ -28,11 +28,11 @@ class UserController {
         nickname        
       );
 
-      const message = "success : true"
+      const message = "true"
       
       return res.status(200).send(message);
     } catch (err) {
-      const message2 = "success: false"
+      const message2 = "false"
       return res.status(400).send(message2);
     }
   };
@@ -122,11 +122,13 @@ class UserController {
         gender,
         id,
       );
-      return res.status(200).json(result);
-
+      const message = "true"
+      return res.status(200).send(message);
+      
     } catch (err) {
-
-      return res.status(err.code).send(err.message);
+      
+      const message = "false"
+      return res.status(400).send(message);
     }
   };
 
@@ -149,6 +151,43 @@ class UserController {
       return res.status(400).json('failed');
     }
   }; 
+
+  // facebookLogin = async (req, res) => {
+  //   const authorization = req.headers.authorization;
+  //   const [authType, authToken] = (authorization || "").split(" ");
+
+  //   if (
+  //     authToken !== undefined &&
+  //     authToken !== null &&
+  //     authType === "Bearer"
+  //   ) {
+  //     return res.status(400).send("DONE_LOGIN");
+  //   }
+  //   const { profile } = req.body;
+
+  //   try {
+  //     const inner = await this.userService.userSignin(nickname, password, provider);
+
+  //     //프론트로 토큰 전송
+  //     if (inner.token === res.locals.login) {
+  //       const error = new Error("Forbidden");
+  //       error.code = 403;
+  //       throw error;
+  //     }
+  //     return res.status(inner.status).json({
+  //       success: true,
+  //       message: "로그인 성공",
+  //       token: inner.token,
+  //     });
+  //   } catch (err) {
+  //     if (err === 403) {
+  //       console.log(err);
+  //       return res.status(err.code).send(err.message);
+  //     }
+  //     console.log(err);
+  //     return res.status(err.code).send(err.message);
+  //   }
+  // };
   
 };
 

@@ -4,3 +4,4 @@ node_modules/
 src/config/
 src/controller/facebook.js
 src/middlewares/fb-middleware.js
+views/
