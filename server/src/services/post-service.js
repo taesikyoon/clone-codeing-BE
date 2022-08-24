@@ -4,6 +4,7 @@ import Comment from "../models/comment.js";
 
 import { db } from "../models/index.js";
 
+const Like = db.sequelize.models.Like;
 // Like는 어떻게 불러오지?
 class PostService {
   createpost = async (content, image, fk_user_id) => {
@@ -21,20 +22,27 @@ class PostService {
       // attributes: ["id", "content"],
       include: [
         { model: User, attributes: ["image", "nickname"] },
-        {
-          model: Comment,
-          // attributes: [
-          //   [db.sequelize.fn("COUNT", db.sequelize.col("fk_post_id")), "Cnt"],
-          // ],
-        },
+        { model: Comment },
+        // { model: Like },
       ],
-      // include: [{ model: Comment }],
     });
-    // return lists;
-
+    const likes = await Like.findAll({
+      attributes: [
+        "fk_post_id",
+        [
+          db.sequelize.fn("COUNT", db.sequelize.col("fk_user_id")),
+          "count_islike",
+        ],
+      ],
+      group: "fk_post_id",
+      raw: true,
+    });
+    // return likes;
     // like 준비하기
     // const postlikes = db.sequelize.models.Like({ where: { fk_user_id } });
     return lists.map((list) => {
+      const data = list?.id === likes[0]?.id ? likes.shift().count_islike : 0;
+      console.log(data);
       return {
         postId: list.id,
         content: list.content,
@@ -42,7 +50,7 @@ class PostService {
         createAt: list.createdAt,
         updatedAt: list.updatedAt,
         cntcomment: list.Comments.length,
-        // likepost:라이크 포스트~
+        cntlike: data,
         User: {
           userimage: list.User.image,
           nickname: list.User.nickname,
@@ -75,12 +83,16 @@ class PostService {
         createdAt: comment.createdAt,
         updatedAt: comment.updatedAt,
         nickname: comment.User.nickname,
+        image: comment.User.image,
       };
     });
+    const likelen = await Like.findAll({ where: { fk_post_id: id } });
+
     return {
       id: list.id,
       content: list.content,
       postimage: list.image,
+      cntlike: likelen.length,
       PostingUser: {
         userId: list.User.id,
         userimage: list.User.image,
@@ -103,7 +115,6 @@ class PostService {
     }
     // 유저 아이디 자기 아이디만 수정가능
     const existPost = await Post.findByPk(postId);
-    console.log(existPost);
     if (!existPost) {
       const error = new Error("존재하지 않는 게시물");
       error.status = 400;
@@ -120,7 +131,6 @@ class PostService {
 
   deletepost = async (postId, userId) => {
     const existPost = await Post.findByPk(postId);
-    console.log(existPost);
 
     if (!existPost) {
       const error = new Error("존재하지 않는 게시물");
@@ -137,20 +147,52 @@ class PostService {
     }
   };
 
-  likepost = async (id, fk_user_id) => {
+  likepost = async (fk_post_id, fk_user_id) => {
     // db.sequelize.models.Like({ where: { fk_user_id } });
-    const existPost = await Post.findByPk(id);
-    console.log(existPost);
-    await existPost.addLiker(fk_user_id);
-  };
+    const existPost = await Post.findOne({
+      where: { id: fk_post_id },
+    });
+    // 게시글 존재
 
-  unlikepost = async (id, userId) => {
-    if (0 === id) {
-      const error = new Error("없는 게시물 입니다.");
-      error.status = 409;
+    if (existPost) {
+      const existLike = await existPost.getLiker({
+        where: { id: fk_user_id },
+      });
+      if (existLike.length) {
+        const error = new Error("두번 누를 수 없습니다.");
+        error.status = 409;
+        throw error;
+      }
+      await existPost.addLiker(fk_user_id);
+    } else {
+      const error = new Error("게시글이 존재하지 않습니다.");
+      error.status = 400;
       throw error;
     }
-    await Like.destroy({ where: { id, userId } });
+  };
+
+  unlikepost = async (fk_post_id, fk_user_id) => {
+    const existPost = await Post.findOne({
+      where: { id: fk_post_id },
+    });
+
+    if (existPost) {
+      // 게시글 존재
+      const existLike = await existPost.getLiker({
+        where: { id: fk_user_id },
+      });
+      if (existLike.length !== 0) {
+        await existPost.removeLiker(fk_user_id);
+      } else {
+        const error = new Error("좋아요 취소 됐다 고만 좀 누르라");
+        error.status = 409;
+        throw error;
+      }
+    } else {
+      const error = new Error("게시글이 존재하지 않습니다.");
+      error.status = 400;
+      throw error;
+    }
   };
 }
 

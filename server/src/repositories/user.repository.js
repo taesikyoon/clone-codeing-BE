@@ -94,7 +94,7 @@ class UserRepository {
             where: { id },
             attributes: ['id', 'name', 'nickname', 'image'],
          }); 
-         
+
          return {user: user, posts: posts};
       } catch (err) {
          const error = new Error("FAILD_SQL");

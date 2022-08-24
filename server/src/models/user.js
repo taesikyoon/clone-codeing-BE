@@ -4,11 +4,8 @@ import { sequelize } from "./sequelize.js";
 
 export default class User extends Sequelize.Model {
   static init(sequelize) {
-    return super.init({
-      name: {
-        type: Sequelize.STRING(10),
-        allowNull: false,
-      },
+    return super.init(
+      {       
       nickname: {
         type: Sequelize.STRING(20),
         allowNull: true,
@@ -63,7 +60,11 @@ export default class User extends Sequelize.Model {
   static associate(db) {
     db.User.hasMany(db.Comment, { foreignKey: "fk_user_id", sourceKey: "id" });
     db.User.hasMany(db.Post, { foreignKey: "fk_user_id", sourceKey: "id" });
-    db.User.belongsToMany(db.Post, { through: "Like", foreignKey: "fk_user_id", sourceKey: "id" });
+    db.User.belongsToMany(db.Post, {
+      through: "Like",
+      foreignKey: "fk_user_id",
+      sourceKey: "id",
+    });
     db.User.belongsToMany(db.Comment, { through: "CommentLike" });
-  } 
+  }
 }
