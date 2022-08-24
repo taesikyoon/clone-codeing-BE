@@ -88,10 +88,13 @@ class PostService {
         image: comment.User.image,
       };
     });
+    const likelen = await Like.findAll({ where: { fk_post_id: id } });
+
     return {
       id: list.id,
       content: list.content,
       postimage: list.image,
+      cntlike: likelen.length,
       PostingUser: {
         userId: list.User.id,
         userimage: list.User.image,
