@@ -78,6 +78,9 @@ class UserService {
     //   //유저의 존재를 확인하기 위해 id를 기준으로 Users테이블 탐색
     let id = 0;
     try {
+      // if (provider === 'facebook') {
+      //   await this.userRepository.c
+      // }
       const user = await this.userRepository.getUser(nickname);
       id = user.id;
       if (user === null || user === undefined) {
@@ -98,7 +101,7 @@ class UserService {
     try {
       const token = jwt.sign({ nickname, id }, process.env.SECRET_KEY);
       console.log(token);
-      //  const token = jwt.sign({id:{ id },iat: Math.floor(Date.now() / 1000) - 30 }, process.env.SECRET_KEY);
+    
       //토큰과 상태,메시지 전송
       return { status: 200, token: token };
     } catch (err) {
