@@ -11,7 +11,7 @@ export default class Post extends Sequelize.Model {
           allowNull: true,
         },
         image: {
-          type: Sequelize.STRING(100),
+          type: Sequelize.STRING(500),
           allowNull: false,
         },
       },

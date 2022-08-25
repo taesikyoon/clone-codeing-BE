@@ -3,17 +3,17 @@ class PostController {
   postService = new PostService();
 
   createpost = async (req, res, next) => {
-    const { content, image } = req.body;
+    const { content } = req.body;
+    const { location } = req.file;
     const { id } = res.locals;
-
-    if (!content || !image)
+    if (!location)
       // 인스타그램 content는 null 허용 수정 필요
       return res
         .status(409)
         .json({ sucess: false, message: "이미지 넣어주세요" });
 
     try {
-      await this.postService.createpost(content, image, id);
+      await this.postService.createpost(content, location, id);
       res
         .status(201)
         .json({ sucess: true, message: "게시글이 작성되었습니다." });
@@ -52,11 +52,12 @@ class PostController {
 
   updatepost = async (req, res, next) => {
     try {
-      const { content, image } = req.body;
+      const { content } = req.body;
       const { postId } = req.params;
+      const { location } = req.file;
       const { id } = res.locals;
 
-      await this.postService.updatepost(postId, content, image, id);
+      await this.postService.updatepost(postId, content, location, id);
       return res
         .status(200)
         .json({ sucess: true, message: "게시글 수정 완료." });
@@ -69,7 +70,6 @@ class PostController {
   deletepost = async (req, res, next) => {
     try {
       const { postId } = req.params;
-      console.log(postId);
       const { id } = res.locals;
       console.log(id);
       await this.postService.deletepost(postId, id);
@@ -85,8 +85,8 @@ class PostController {
   likepost = async (req, res, next) => {
     try {
       const { postId } = req.params;
-      const { userId } = req.locals;
-      await this.postService.likepost(postId, userId);
+      const { id } = res.locals;
+      await this.postService.likepost(postId, id);
 
       return res.status(200).json({ sucess: true, message: "좋아요 완료." });
     } catch (err) {
@@ -98,8 +98,8 @@ class PostController {
   unlikepost = async (req, res, next) => {
     try {
       const { postId } = req.params;
-      const { userId } = req.locals;
-      await this.postService.unlikepost(postId, userId);
+      const { id } = res.locals;
+      await this.postService.unlikepost(postId, id);
 
       return res
         .status(200)

@@ -1,5 +1,6 @@
 import UserService from "../services/user-service.js";
 import joi from "joi";
+import jwt from "jsonwebtoken";
 
 class UserController {
   userService = new UserService();
@@ -29,10 +30,11 @@ class UserController {
       );
 
       const message = "true"
-
+      
       return res.status(200).send(message);
     } catch (err) {
-      return res.status(400).send(err.message);
+      const message2 = "false"
+      return res.status(400).send(message2);
     }
   };
 
@@ -44,10 +46,11 @@ class UserController {
     if (
       authToken !== undefined &&
       authToken !== null &&
-      authType === "BEAVER"
+      authType === "Bearer"
     ) {
       return res.status(400).send("DONE_LOGIN");
     }
+    
     const { nickname, password } = req.body;
 
     try {
@@ -121,11 +124,13 @@ class UserController {
         gender,
         id,
       );
-      return res.status(200).json(result);
-
+      const message = "true"
+      return res.status(200).send(message);
+      
     } catch (err) {
-
-      return res.status(err.code).send(err.message);
+      
+      const message = "false"
+      return res.status(400).send(message);
     }
   };
 
@@ -148,6 +153,45 @@ class UserController {
       return res.status(400).json('failed');
     }
   }; 
+
+  facebookLogin = async (req, res) => {
+    const authorization = req.headers.authorization;
+    const [authType, authToken] = (authorization || "").split(" ");
+
+    if (
+      authToken !== undefined &&
+      authToken !== null &&
+      authType === "Bearer"
+    ) {
+      return res.status(400).send("DONE_LOGIN");
+    }
+   
+    const fbInfo = jwt.verify(req.query.token, "InstacloneSecretKey");
+    const nickname = fbInfo.nickname;
+    const provider = fbInfo.provider;
+    try {
+      const inner = await this.userService.fbLogin(nickname, provider);
+            
+      //프론트로 토큰 전송
+      if (inner.token === res.locals.login) {
+        const error = new Error("Forbidden");
+        error.code = 403;
+        throw error;
+      }
+      return res.status(inner.status).json({
+        success: true,
+        message: "로그인 성공",
+        token: inner.token,
+      });
+    } catch (err) {
+      if (err === 403) {
+        console.log(err);
+        return res.status(err.code).send(err.message);
+      }
+      console.log(err);
+      return res.status(err.code).send(err.message);
+    }
+  };
   
 };
 
