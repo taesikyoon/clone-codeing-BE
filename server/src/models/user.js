@@ -64,5 +64,5 @@ export default class User extends Sequelize.Model {
     db.User.hasMany(db.Post, { foreignKey: "fk_user_id", sourceKey: "id" });
     db.User.belongsToMany(db.Post, { through: "Like", foreignKey: "fk_user_id", sourceKey: "id" });
     db.User.belongsToMany(db.Comment, { through: "CommentLike" });
-  } 
+  }
 }

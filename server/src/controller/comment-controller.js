@@ -42,7 +42,7 @@ const createComment = async (req, res, next) => {
 };
 
 const deleteComment = async (req, res, next) => {
-  const userId = req.locals.id;
+  const userId = res.locals.id;
   const commentId = parseInt(req.params.commentId);
   if (!commentId || !userId) {
     return res.status(400).json({
@@ -77,7 +77,7 @@ const deleteComment = async (req, res, next) => {
 
 const updateComment = async (req, res, next) => {
   const comment = req.body.comment;
-  const userId = req.locals.id;
+  const userId = res.locals.id;
   const commentId = parseInt(req.params.commentId);
   if (!commentId || !userId) {
     return res.status(400).json({
