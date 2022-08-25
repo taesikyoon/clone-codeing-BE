@@ -28,7 +28,7 @@ passport.use(new facebookStrategy({
 
   clientID: '585960963002856',
   clientSecret: 'd0d545cc0b663ac565bd7ce78463f0bf',
-  callbackURL: "http://localhost:3000/facebook/callback",
+  callbackURL: "http://7th-clone-bapo.s3-website.ap-northeast-2.amazonaws.com//facebook/callback",
   profileFields: ['id', 'displayName', 'name', 'picture.type(small)', 'email'],
 
 },
