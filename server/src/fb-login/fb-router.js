@@ -11,7 +11,8 @@ const app = express();
 const router = express.Router();
 const facebookStrategy = passportFacebook.Strategy;
 
-app.set("view engine", "ejs");
+app.set('view engine','ejs');
+app.set('views', '../views');
 
 router.use(session({
   secret: "secretkey",
@@ -27,7 +28,7 @@ passport.use(new facebookStrategy({
 
   clientID: '585960963002856',
   clientSecret: 'd0d545cc0b663ac565bd7ce78463f0bf',
-  callbackURL: "http://localhost:1000/facebook/callback",
+  callbackURL: "http://localhost:3000/facebook/callback",
   profileFields: ['id', 'displayName', 'name', 'picture.type(small)', 'email'],
 
 },
@@ -82,9 +83,9 @@ passport.deserializeUser(function (id, done) {
 
 
 //====================페이스북 테스트용============================
-app.get('/api/facebook', (req, res) => {
-  res.render('index.ejs')
-});
+// app.get('/api/facebook', (req, res) => {
+//   res.render("index")
+// });
 
 
 router.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
