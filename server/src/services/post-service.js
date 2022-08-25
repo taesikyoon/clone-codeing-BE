@@ -44,7 +44,6 @@ class PostService {
     // const postlikes = db.sequelize.models.Like({ where: { fk_user_id } });
     lists.reverse();
     return lists.map((list) => {
-      console.log(likes);
       const statuslike =
         list?.id === likes[0]?.fk_post_id && likes[0]?.fk_user_id === id
           ? true
