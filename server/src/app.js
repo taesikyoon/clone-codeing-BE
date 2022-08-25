@@ -18,7 +18,7 @@ dotenv.config();
 const app = express();
 const __dirname = path.resolve();
 
-app.set("port", 1000);
+app.set("port", 3000);
 sequelize
   .sync()
   // .sync({ force: true })
