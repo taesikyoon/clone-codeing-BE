@@ -17,7 +17,7 @@ class PostService {
     }
   };
 
-  findAllPosts = async () => {
+  findAllPosts = async (id) => {
     const lists = await Post.findAll({
       // attributes: ["id", "content"],
       include: [
@@ -29,6 +29,7 @@ class PostService {
     const likes = await Like.findAll({
       attributes: [
         "fk_post_id",
+        "fk_user_id",
         [
           db.sequelize.fn("COUNT", db.sequelize.col("fk_user_id")),
           "count_islike",
@@ -41,7 +42,10 @@ class PostService {
     // like 준비하기
     // const postlikes = db.sequelize.models.Like({ where: { fk_user_id } });
     return lists.map((list) => {
-      const data = list?.id === likes[0]?.id ? likes.shift().count_islike : 0;
+      const statuslike = likes[0]?.fk_user_id === id ? true : false;
+      const cntlike =
+        list?.id === likes[0]?.fk_post_id ? likes.shift().count_islike : 0;
+
       return {
         postId: list.id,
         content: list.content,
@@ -49,14 +53,15 @@ class PostService {
         createAt: list.createdAt,
         updatedAt: list.updatedAt,
         cntcomment: list.Comments.length,
-        cntlike: data,
+        cntlike,
+        statuslike,
         User: {
           userimage: list.User.image,
           nickname: list.User.nickname,
-          introduce,
-          email,
-          phone,
-          gender,
+          // introduce,
+          // email,
+          // phone,
+          // gender,
         },
       };
     });
