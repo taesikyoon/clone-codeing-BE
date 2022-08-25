@@ -12,6 +12,7 @@ class UserService {
 
   //회원가입 진행
   userSignup = async (name, password, nickname) => {
+    
     if (
       name === undefined ||
       password === undefined ||
@@ -29,7 +30,7 @@ class UserService {
     //영어,숫자 4~9자리 (3인이유는 <이기떄문에)
     const reg_Id = /^[A-Za-z0-9]{2,9}$/.test(nickname);
     //영어,숫자 4~9자리 (3인이유는 <이기떄문에)
-    const reg_Pw = /^[A-Za-z0-9!@#$%^&*]{8,20}$/.test(password);
+    const reg_Pw = /^[A-Za-z0-9!@#$%^&*]{4,20}$/.test(password);
     //특수문자 제외
     const reg_Nick1 = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g.test(
       nickname
@@ -89,6 +90,49 @@ class UserService {
         throw error;
       }
       if (password != user.password) {
+        const error = new Error("BAD_VALIDATION");
+        error.code = 403;
+        throw error;
+      }
+    } catch (err) {
+      throw err;
+    }
+
+    //토큰 생성
+    try {
+      const token = jwt.sign({ nickname, id }, process.env.SECRET_KEY);
+      console.log(token);
+    
+      //토큰과 상태,메시지 전송
+      return { status: 200, token: token };
+    } catch (err) {
+      const error = new Error("BAD_TOKEN");
+      console.log(err);
+      error.code = 403;
+      throw error;
+    }
+  };
+
+  fbLogin = async (nickname, provider) => {
+    if (nickname === undefined || provider === 'local') {
+      const error = new Error("BAD_REQUEST");
+      error.code = 400;
+      throw error;
+    }
+    //   //유저의 존재를 확인하기 위해 id를 기준으로 Users테이블 탐색
+    let id = 0;
+    try {
+      // if (provider === 'facebook') {
+      //   await this.userRepository.c
+      // }
+      const user = await this.userRepository.getUser(nickname);
+      id = user.id;
+      if (user === null || user === undefined) {
+        const error = new Error("BAD_VALIDATION");
+        error.code = 403;
+        throw error;
+      }
+      if (provider != 'facebook') {
         const error = new Error("BAD_VALIDATION");
         error.code = 403;
         throw error;

@@ -3,9 +3,9 @@ import passport from 'passport';
 import passportFacebook from 'passport-facebook';
 import session from 'express-session';
 import jwt from "jsonwebtoken";
-import { config } from "dotenv";
+import dotenv from "dotenv";
 import User from '../models/user.js';
-config({ path: process.ENV })
+dotenv.config();
 
 const app = express();
 const router = express.Router();
@@ -43,11 +43,9 @@ passport.use(new facebookStrategy({
       if (existUser) {
         const nickname = existUser.dataValues.nickname;
         const id = existUser.dataValues.id;
+        const provider = existUser.dataValues.provider;
 
-        token = jwt.sign({ nickname, id }, 'InstacloneSecretKey');
-      console.log(token);
-      console.log(existUser);
-      console.log("여기까지")
+      token = jwt.sign({ nickname, provider }, process.env.SECRET_KEY);
       return done(null, token)
       } else {
         const fbEmail = profile.emails[0].value;
@@ -84,15 +82,10 @@ passport.deserializeUser(function (id, done) {
 
 
 //====================페이스북 테스트용============================
-router.get('/api/auth/facebook', (req, res) => {
-  res.render('index.ejs')
-});
+// router.get('/facebook', (req, res) => {
+//   res.render('index.ejs')
+// });
 
-router.get('/profile',(req,res) => {
-  res.send("you are authenticated")
-})
-
-//================================================================
 
 router.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
 
@@ -101,7 +94,7 @@ router.get(
   passport.authenticate('facebook',{failureRedirect: '/api/auth/signin'}),
   function (req, res) {  
     console.log(req.user) 
-    res.redirect('/api/post' + '?token=' + req.user);
+    res.redirect('/api/auth/facebook' + '?token=' + req.user);
   }
 );
 
