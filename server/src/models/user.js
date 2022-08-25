@@ -5,47 +5,50 @@ import { sequelize } from "./sequelize.js";
 export default class User extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
-      {       
-      nickname: {
-        type: Sequelize.STRING(20),
-        allowNull: true,
-        unique: true,
-      },
-      password: {
-        type: Sequelize.STRING(100),
-        allowNull: true,
-      },
-      image: {
-        type: Sequelize.STRING(100),
-        allowNull: true,
-      },
-      snsId: {
-        type: Sequelize.STRING(100),
-        allowNull: true,
-      },
-      provider: {
-        type: Sequelize.STRING(20),
-        allowNull: false,
-        defaultValue: "local",
-      },
-      introduce: {
-        type: Sequelize.STRING(50),
-        allowNull: true,
-      },
-      email: {
-        type: Sequelize.STRING(50),
-        allowNull: true,
-        unique : true,
-      },
-      phone: {
-        type: Sequelize.STRING(20),
-        allowNull: true,
-      },
-      gender: {
-        type: Sequelize.ENUM("male", "female"),
-        allowNull: true,
-      },
-    }, {
+      {
+        name: {
+          type: Sequelize.STRING(10),
+          allowNull: false,
+        },
+        nickname: {
+          type: Sequelize.STRING(20),
+          allowNull: true,
+          unique: true,
+        },
+        password: {
+          type: Sequelize.STRING(100),
+          allowNull: true,
+        },
+        image: {
+          type: Sequelize.STRING(500),
+          allowNull: true,
+        },
+        snsId: {
+          type: Sequelize.STRING(100),
+          allowNull: true,
+        },
+        provider: {
+          type: Sequelize.STRING(20),
+          allowNull: false,
+          defaultValue: "local",
+        },
+        introduce: {
+          type: Sequelize.STRING(50),
+          allowNull: true,
+        },
+        email: {
+          type: Sequelize.STRING(50),
+          allowNull: true,
+        },
+        phone: {
+          type: Sequelize.STRING(20),
+          allowNull: true,
+        },
+        gender: {
+          type: Sequelize.ENUM("male", "female"),
+          allowNull: true,
+        },
+      }, {
       sequelize,
       timestamps: true,
       paranoid: false,
