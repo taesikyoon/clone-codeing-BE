@@ -17,6 +17,8 @@ dotenv.config();
 
 const app = express();
 const __dirname = path.resolve();
+app.set('view engine','ejs');
+app.set('views', '../views');
 
 app.set("port", 3000);
 sequelize
@@ -36,6 +38,10 @@ app.use("/api/post", postRouter);
 app.use("/api/comment", commentRouter);
 app.use("/", facebookRouter);
 app.get("/token", token);
+app.get('/api/facebook', (req, res) => {
+  res.render("index")
+});
+
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 존재하지 않습니다.`);
