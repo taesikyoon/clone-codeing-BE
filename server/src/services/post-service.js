@@ -42,7 +42,6 @@ class PostService {
     // const postlikes = db.sequelize.models.Like({ where: { fk_user_id } });
     return lists.map((list) => {
       const data = list?.id === likes[0]?.id ? likes.shift().count_islike : 0;
-      console.log(data);
       return {
         postId: list.id,
         content: list.content,
@@ -54,6 +53,10 @@ class PostService {
         User: {
           userimage: list.User.image,
           nickname: list.User.nickname,
+          introduce,
+          email,
+          phone,
+          gender,
         },
       };
     });
