@@ -38,14 +38,15 @@ class PostService {
       group: "fk_post_id",
       raw: true,
     });
+    likes.reverse();
     // return likes;
     // like 준비하기
     // const postlikes = db.sequelize.models.Like({ where: { fk_user_id } });
+    lists.reverse();
     return lists.map((list) => {
       const statuslike = likes[0]?.fk_user_id === id ? true : false;
       const cntlike =
         list?.id === likes[0]?.fk_post_id ? likes.shift().count_islike : 0;
-
       return {
         postId: list.id,
         content: list.content,
