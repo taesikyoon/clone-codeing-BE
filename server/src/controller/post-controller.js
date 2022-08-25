@@ -25,8 +25,7 @@ class PostController {
 
   findAllPosts = async (req, res, next) => {
     try {
-      const data = await this.postService.findAllPosts();
-
+      const data = await this.postService.findAllPosts(res.locals.id);
       return res
         .status(200)
         .json({ sucess: true, message: "전체 게시글 조회 성공.", data });
