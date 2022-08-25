@@ -82,9 +82,9 @@ passport.deserializeUser(function (id, done) {
 
 
 //====================페이스북 테스트용============================
-// router.get('/facebook', (req, res) => {
-//   res.render('index.ejs')
-// });
+app.get('/api/facebook', (req, res) => {
+  res.render('index.ejs')
+});
 
 
 router.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
