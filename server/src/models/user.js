@@ -71,3 +71,4 @@ export default class User extends Sequelize.Model {
     db.User.belongsToMany(db.Comment, { through: "CommentLike" });
   }
 }
+
